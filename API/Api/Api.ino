@@ -11,6 +11,15 @@ const char* password ="";
 
 WebServer server(80);
 
+float latitude = 18.37;
+float longitude =-97.37;
+bool current_weather = true ;
+
+String Json = "";
+const int ledPin = 14;
+int ledState = LOW;
+
+
 const char* htmlPage = R"rawliteral(
 <!DOCTYPE html>
 <html>
@@ -43,9 +52,6 @@ void handleRoot(){
   server.send(200,"text/html",htmlPage);
 }
 
-float latitude = 19.04;
-float longitude =-98.20;
-bool current_weather = true ;
 
 void handleWeather(){
   if(WiFi.status() == WL_CONNECTED){

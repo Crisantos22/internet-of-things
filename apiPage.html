@@ -7,20 +7,46 @@
     <style> </style>
 </head>
 <body>
-    <h1>Temperatura Actual en Puebla</h1>
+    <h1>Consulta de Temperatura</h1>
+    
+    <form action="/setcoords" method="GET">  
+        Latitud: <input type="text" name="lat" value="18.37">
+        <br>
+        <br>
+        Longitud: <input type="text" name="lon" value="-97.77">
+        <br>
+        <br>
+
+        <input type="submit" value="Consultar">
+    </form>
+
+    <p>Temperatura actual: </p>
     <p id="tempValue">---</p>
 
+    <p>Estado del LED (noche=encendido): </p>
+    <p id="ledStatus">---</p>
+
+    <h2>Respuesta JSON: </h2>
+    <pre id="jsonData">---</pre>
     <script>
         function updateWeather() {
             fetch('/weather')
-            .then(response => response.text())
-            .then(data=>
+            .then(response => response.json())
+            .then(data=> {
                 document.getElementById('tempValue')
-                .innerText = data + ' °C'
-            );
+                .innerText = data.temperature + ' °C';
+
+                document.getElementById('ledStatus')
+                .innerText = data.led == 1 ? 'Encendido' : 'Apagado';
+
+                document.getElementById('jsonData')
+                .innerText = JSON.stringify(data.json, null, 2);
+            });
         }
 
+        updateWeather(); // Llamada inicial para mostrar datos al cargar la página
         setInterval(updateWeather, 5000); // Actualiza cada 5 segundos
+        
     </script>
 </body>
 </html>
